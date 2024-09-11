@@ -30,9 +30,13 @@ import java.util.List;
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
+    private final DishMapper dishMapper;
+    private final SetmealMapper setmealMapper;
 
-    public CategoryServiceImpl(CategoryMapper categoryMapper) {
+    public CategoryServiceImpl(CategoryMapper categoryMapper, DishMapper dishMapper, SetmealMapper setmealMapper) {
         this.categoryMapper = categoryMapper;
+        this.dishMapper = dishMapper;
+        this.setmealMapper = setmealMapper;
     }
 
     /**
@@ -100,6 +104,28 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateTime(LocalDateTime.now());
 
         categoryMapper.update(category);
+
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param id
+     */
+    @Override
+    public void delete(Integer id) {
+        Category category = new Category();
+
+        Integer count = dishMapper.countByCategoryId(id);
+        if(count > 0) {
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
+        }
+        count = setmealMapper.countByCategoryId(id);
+        if(count > 0) {
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);
+        }
+
+        categoryMapper.delete(id);
 
     }
 }
