@@ -86,4 +86,20 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryMapper.update(category);
     }
+
+    /**
+     * 修改分类
+     *
+     * @param categoryDTO
+     */
+    @Override
+    public void updateStatus(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO, category);
+        category.setUpdateUser(BaseContext.getCurrentId());
+        category.setUpdateTime(LocalDateTime.now());
+
+        categoryMapper.update(category);
+
+    }
 }
