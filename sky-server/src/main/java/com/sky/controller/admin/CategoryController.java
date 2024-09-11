@@ -38,4 +38,16 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 分类分页查询
+     * @param categoryPageQueryDTO
+     * @return
+     */
+    @GetMapping("page")
+    @ApiOperation("分类分页查询")
+    public Result<PageResult> page(CategoryPageQueryDTO categoryPageQueryDTO) {
+        log.info("分类分页查询:{}", categoryPageQueryDTO);
+        PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
+        return Result.success(pageResult);
+    }
 }

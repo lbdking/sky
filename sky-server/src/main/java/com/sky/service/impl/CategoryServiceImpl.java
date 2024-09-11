@@ -7,6 +7,7 @@ import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
@@ -51,5 +52,23 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateUser(BaseContext.getCurrentId());
 
         categoryMapper.insert(category);
+    }
+
+    /**
+     * 分类分页查询
+     *
+     * @param categoryPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
+        PageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
+        Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
+
+        long total = page.getTotal();
+
+        List<Category> records = page.getResult();
+
+        return new PageResult(total, records);
     }
 }
