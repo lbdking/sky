@@ -50,4 +50,18 @@ public class CategoryController {
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
         return Result.success(pageResult);
     }
+
+    /**
+     * 启动禁用分类
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("status/{status}")
+    @ApiOperation("启动禁用分类")
+    public Result<String> updateStatus(@PathVariable Integer status, Long id) {
+        log.info("启动禁用分类:{}{}", status, id);
+        categoryService.updateStatus(status,id);
+        return Result.success();
+    }
 }
