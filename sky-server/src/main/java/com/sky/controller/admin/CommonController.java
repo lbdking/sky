@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sky.constant.MessageConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -66,7 +65,7 @@ public class CommonController {
             return Result.success(fileUrl);
 
         } catch (IOException e) {
-            return Result.error(e.getMessage());
+            return Result.error(MessageConstant.UPLOAD_FAILED);
         }
     }
 
