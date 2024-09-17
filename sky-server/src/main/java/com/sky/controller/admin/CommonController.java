@@ -30,7 +30,7 @@ import java.util.UUID;
 @Slf4j
 public class CommonController {
 
-    private static final String GITEE_API_URL = "https://gitee.com/api/v5/repos/{owner}/{repo}/contents/{path}/skyimg";
+    private static final String GITEE_API_URL = "https://gitee.com/api/v5/repos/{owner}/{repo}/contents/skyimg/{path}";
     private static final String ACCESS_TOKEN = "e0638074ac7e9b565afd9cc3bfbd1630"; // 你需要在这里填写你的 Gitee access_token
     private static final String OWNER = "liu-bingduo"; // Gitee 用户名
     private static final String REPO = "pic-bed"; // 仓库名称

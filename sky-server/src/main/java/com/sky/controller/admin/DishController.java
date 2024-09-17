@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -90,6 +91,19 @@ public class DishController {
     public Result update(@RequestBody DishDTO dishDTO){
         log.info("修改菜品:{}",dishDTO);
         dishServer.updateWithFlavor(dishDTO);
+        return Result.success();
+    }
+
+    /**
+     * 菜品起售停售
+     * @param id
+     * @return
+     */
+    @ApiOperation("菜品起售停售")
+    @PostMapping("status/{status}")
+    public Result status(Long id,@PathVariable Integer status){
+        log.info("菜品起售停售:{}",id);
+        dishServer.status(id,status);
         return Result.success();
     }
 }
