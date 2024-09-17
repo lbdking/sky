@@ -31,5 +31,6 @@ public interface DishFlavorMapper {
     List<DishFlavor> getByDishId(Long dishid);
 
 
-    
+    @Delete("delete from dish_flavor where dish_id = #{dishid}")
+    void deleteById(Long id);
 }

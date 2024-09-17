@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -120,5 +121,28 @@ public class DishServerImpl implements DishServer {
         BeanUtils.copyProperties(dish,dishVO);
         dishVO.setFlavors(dishFlavors);
         return dishVO;
+    }
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO
+     */
+    @Override
+    public void updateWithFlavor(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO,dish);
+        dishMapper.update(dish);
+        dishFlavorMapper.deleteById(dishDTO.getId());
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if(flavors != null && flavors.size() > 0) {
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dish.getId());
+            });
+
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
     }
 }
