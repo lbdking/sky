@@ -105,4 +105,20 @@ public class DishServerImpl implements DishServer {
 
 
     }
+
+    /**
+     * 根据id查询菜品和口味
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        DishVO dishVO = new DishVO();
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getByDishId(id);
+        Dish dish = dishMapper.getById(id);
+        BeanUtils.copyProperties(dish,dishVO);
+        dishVO.setFlavors(dishFlavors);
+        return dishVO;
+    }
 }
