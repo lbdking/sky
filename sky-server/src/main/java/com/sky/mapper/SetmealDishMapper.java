@@ -21,4 +21,10 @@ public interface SetmealDishMapper {
      * @param setmealDishes
      */
     void saveStemealDish(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据套餐id删除对应菜品
+     * @param ids
+     */
+    void delete(List<Long> ids);
 }

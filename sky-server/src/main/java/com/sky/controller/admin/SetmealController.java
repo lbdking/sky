@@ -45,4 +45,21 @@ public class SetmealController {
         return Result.success(pageResult);
     }
 
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result update(@RequestBody SetmealDTO setmealDTO) {
+        log.info("套餐修改:{}",setmealDTO);
+        setmealService.update(setmealDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result delete(@RequestParam List<Long> ids) {
+        log.info("批量删除套餐:{}",ids);
+        setmealService.delete(ids);
+        return Result.success();
+
+    }
+
 }
