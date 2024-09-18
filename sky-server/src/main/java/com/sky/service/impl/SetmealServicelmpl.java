@@ -1,14 +1,16 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.SetmealDTO;
-import com.sky.entity.Dish;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
+import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +45,21 @@ public class SetmealServicelmpl implements SetmealService {
         }
         setmealDishMapper.saveStemealDish(setmealDishes);
 
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult page(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageHelper.startPage(setmealPageQueryDTO.getPage(), setmealPageQueryDTO.getPageSize());
+        Page<Setmeal> page = setmealMapper.pageQuery(setmealPageQueryDTO);
+
+        long total = page.getTotal();
+        List<Setmeal> setmeals = page.getResult();
+        return new PageResult(total, setmeals);
     }
 }
