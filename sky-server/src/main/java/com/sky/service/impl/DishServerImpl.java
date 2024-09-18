@@ -8,10 +8,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishServer;
 import com.sky.vo.DishVO;
@@ -20,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -33,13 +36,15 @@ public class DishServerImpl implements DishServer {
     private final DishFlavorMapper dishFlavorMapper;
     private final DishMapper dishMapper;
     private final SetmealDishMapper setmealDishMapper;
+    private final SetmealMapper setmealMapper;
 
 
-    public DishServerImpl(DishFlavorMapper dishFlavorMapper, DishMapper dishMapper, SetmealDishMapper setmealDishMapper) {
+    public DishServerImpl(DishFlavorMapper dishFlavorMapper, DishMapper dishMapper, SetmealDishMapper setmealDishMapper, SetmealMapper setmealMapper) {
         this.dishFlavorMapper = dishFlavorMapper;
         this.dishMapper = dishMapper;
         this.setmealDishMapper = setmealDishMapper;
 
+        this.setmealMapper = setmealMapper;
     }
 
     @Override
@@ -152,6 +157,35 @@ public class DishServerImpl implements DishServer {
     public void status(Long id, Integer status) {
         Dish dish = dishMapper.getById(id);
         dish.setStatus(status);
+        if (status == StatusConstant.DISABLE) {
+            // 如果是停售操作，还需要将包含当前菜品的套餐也停售
+            List<Long> dishIds = new ArrayList<>();
+            dishIds.add(id);
+            List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(dishIds);
+            if (setmealIds != null && setmealIds.size() > 0) {
+                for (Long setmealId : setmealIds) {
+                    Setmeal setmeal = Setmeal.builder()
+                            .id(setmealId)
+                            .status(StatusConstant.DISABLE)
+                            .build();
+                    setmealMapper.update(setmeal);
+                }
+            }
+        }
         dishMapper.update(dish);
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId) {
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE);
+        return dishMapper.list(dish);
     }
 }
