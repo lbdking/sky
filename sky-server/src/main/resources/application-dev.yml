@@ -11,3 +11,6 @@ sky:
     port: 6379
     auth: liusan666
     database: 1
+  wechat:
+    appid: wxdea05b187a1c725d
+    secret: f55aca1bd0a1d52737638faff5a70ace
