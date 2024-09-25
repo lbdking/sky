@@ -33,6 +33,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     /**
+     * 购物车列表
+     *
+     * @return
+     */
+    @Override
+    public List<ShoppingCart> list() {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder().userId(userId).build();
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        return list;
+    }
+
+    /**
      * 添加购物车
      *
      * @param shoppingCartDTO
