@@ -5,6 +5,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.core.annotation.Order;
 
 @Mapper
 public interface OrderMapper {
@@ -34,4 +35,13 @@ public interface OrderMapper {
      * @return
      */
     Page<Orders> pageQueryHistory(OrdersPageQueryDTO ordersPageQueryDTO);
+
+
+    /**
+     * 根据id查询订单
+     * @param id
+     * @return
+     */
+    @Select("select * from orders where id = #{id}")
+    Orders getById(Long id);
 }
